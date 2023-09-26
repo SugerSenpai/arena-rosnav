@@ -82,6 +82,9 @@ class RobotManager:
             move base and rviz and moves the robot to
             the start position.
         """
+
+        time.sleep(0.1) # delay so legged robots have time to lose inertia
+
         self.start_pos, self.goal_pos = self.generate_new_start_and_goal(
             forbidden_zones, start_pos, goal_pos
         )
