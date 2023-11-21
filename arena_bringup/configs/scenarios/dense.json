@@ -1,0 +1,17 @@
+
+    {
+    "robots": [
+      {
+        "start": [23.0, 0.0, 0.0],
+        "goal": [-20.0, 0.0, 0.0]
+      }
+    ],
+    "obstacles": {
+      "static": [],
+      "interactive": [],
+      "dynamic": []
+    
+    },
+    "resets": 50,
+    "map": "arena_hawker_centre"
+  }

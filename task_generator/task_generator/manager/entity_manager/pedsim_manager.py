@@ -2,6 +2,8 @@ import dataclasses
 import functools
 import itertools
 
+import scipy
+
 import rospy
 import re
 
@@ -23,6 +25,8 @@ from typing import Iterator, List
 from task_generator.simulators.gazebo_simulator import GazeboSimulator
 from task_generator.utils import rosparam_get
 
+from tf.transformations import euler_from_quaternion
+import math
 
 T = Constants.WAIT_FOR_SERVICE_TIMEOUT
 
@@ -454,6 +458,8 @@ class PedsimManager(EntityManager):
             else:
                 rospy.logdebug(
                     "Spawning dynamic obstacle: actor_id = %s", actor_id)
+                
+                quat = actor_pose.orientation
 
                 self._simulator.spawn_entity(
                     entity=Obstacle(
@@ -461,7 +467,7 @@ class PedsimManager(EntityManager):
                         position=(
                             actor_pose.position.x,
                             actor_pose.position.y,
-                            actor_pose.orientation.z
+                            scipy.spatial.transform.Rotation.from_quat([quat.x,quat.y,quat.z,quat.w]).as_euler("xyz")[2]
                         ),
                         model=obstacle.obstacle.model,
                         extra=obstacle.obstacle.extra
@@ -508,7 +514,7 @@ class PedsimManager(EntityManager):
                 pos=(
                     obstacle_position.x,
                     obstacle_position.y,
-                    orientation
+                    math.atan2(direction_y, direction_x)
                 ),
                 name=obstacle_name
             )

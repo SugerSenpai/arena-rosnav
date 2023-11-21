@@ -31,6 +31,7 @@
 - git:
     local-name: ../utils-extern/misc/robots
     uri: https://github.com/voshch/3rd-party-robot-packages
+    version: robot-videos
 
 - git:
     local-name: ../utils-extern/misc/jackal
@@ -49,8 +50,8 @@
 
 - git:
     local-name: ../arena-simulation-setup
-    uri: https://github.com/Arena-Rosnav/arena-simulation-setup.git
-    version: dev
+    uri: https://github.com/voshch/arena-simulation-setup.git
+    version: robot-videos
 
 - git:
     local-name: ../arena-evaluation

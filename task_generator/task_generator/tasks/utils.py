@@ -1,4 +1,5 @@
 import dataclasses
+from io import StringIO
 import itertools
 import json
 import os
@@ -206,12 +207,15 @@ class ITF_Scenario(ITF_Base):
         with open(map_path) as f:
             map_yaml = yaml.load(f, Loader=yaml.FullLoader)
 
-        with open(
-            os.path.join(
-                base_path, "worlds", map_name, "ped_scenarios", f"{map_name}.xml"
-            )
-        ) as f:
-            map_xml = ET.parse(f)
+        
+
+        # with open(
+        #     os.path.join(
+        #         base_path, "worlds", map_name, "ped_scenarios", f"{map_name}.xml"
+        #     )
+        # ) as f:
+        #     map_xml = ET.parse(f)
+        map_xml = ET.parse(StringIO("""<xml></xml>"""))
 
         scenario = Scenario(
             obstacles=ScenarioObstacles(
@@ -242,12 +246,10 @@ class ITF_Scenario(ITF_Base):
             rospy.logerr(f"Scenario Map Path {scenario_map_path}")
             rospy.logerr(f"Static Map Path {static_map}")
 
-            rospy.signal_shutdown(
+            rospy.logwarn(
                 "Map path of scenario and static map are not the same."
             )
-            sys.exit()
-            return False
-
+            
         # check robot manager length
         scenario_robots_length = len(scenario.robots)
         setup_robot_length = len(self.PROPS.robot_managers)
@@ -258,6 +260,7 @@ class ITF_Scenario(ITF_Base):
             ]
             rospy.logwarn(
                 "Roboto setup contains more robots than the scenario file.")
+        
 
         if scenario_robots_length > setup_robot_length:
             scenario.robots = scenario.robots[:setup_robot_length]

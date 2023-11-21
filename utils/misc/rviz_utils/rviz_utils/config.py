@@ -157,7 +157,9 @@ class Config:
         return Config._create_map_display(robot_name, topic, 0.7, "Global Costmap")
 
     def create_local_map_display(robot_name, topic, _):
-        return Config._create_map_display(robot_name, topic, 0.3, "Local Costmap")
+        config = Config._create_map_display(robot_name, topic, 0.3, "Local Costmap")
+        config["Enabled"] = True
+        return config
 
     def _create_map_display(robot_name, topic, alpha, name):
         return {
@@ -214,10 +216,10 @@ class Config:
             "Axis": "Z",
             "Channel Name": "intensity",
             "Class": "rviz/LaserScan",
-            "Color": color,
+            "Color": "239; 41; 41",
             "Color Transformer": "FlatColor",
             "Decay Time": 0,
-            "Enabled": False,
+            "Enabled": True,
             "Invert Rainbow": False,
             "Max Color": "239; 41; 41",
             "Min Color": "164; 0; 0",

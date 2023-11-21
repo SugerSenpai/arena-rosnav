@@ -90,7 +90,7 @@ class GazeboSimulator(BaseSimulator):
         pose.position.y = pos[1]
         pose.position.z = 0.35
         pose.orientation = Quaternion(
-            *quaternion_from_euler(0.0, 0.0, pos[2], axes="sxyz")
+            *quaternion_from_euler(0.0, 0.0, 1/4 * 3.14159, axes="sxyz")
         )
         request.model_state.pose = pose
         request.model_state.reference_frame = "world"
@@ -110,8 +110,7 @@ class GazeboSimulator(BaseSimulator):
                 y=entity.position[1],
                 z=0
             ),
-            orientation=Quaternion(*quaternion_from_euler(0.0, 0.0, entity.position[2], axes="sxyz")
-                                   )
+            orientation=Quaternion(*quaternion_from_euler(0.0, 0.0, 1/4 * 3.14159, axes="sxyz"))
         )
         request.robot_namespace = self._namespace(entity.name)
         request.reference_frame = "world"
