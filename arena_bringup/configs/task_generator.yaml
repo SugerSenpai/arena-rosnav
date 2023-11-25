@@ -31,7 +31,7 @@ task_mode:
 
 pedsim:
   default_actor_config:
-    VMAX: 0.5
+    VMAX: 0.1
     MAX_TALKING_DISTANCE: 1
     TALKING_BASE_TIME: 5
     CHATTING_PROBABILITY: 0

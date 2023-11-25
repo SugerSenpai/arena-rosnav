@@ -10,103 +10,68 @@
     "interactive": [],
     "dynamic": [
       {
-        "name": "0",
-        "id": 0,
-        "pos": [-20.0, 0.0, 0.0],
-        "type": "adult",
-        "model": "actor1",
-        "waypoints": [[23.0, 0.0, 0.0], [-20.0, 0.0, 0.0]],
-        "waypoint_mode": 0
-      },
-      {
-        "name": "1",
-        "id": 0,
-        "pos": [0.0, -20.0, 0.0],
-        "type": "adult",
-        "model": "actor1",
-        "waypoints": [[0.0, 20.0, 0.0], [0.0, -20.0, 0.0]],
-        "waypoint_mode": 0
-      },
-      {
-        "name": "2",
-        "id": 0,
-        "pos": [0.0, 20.0, 0.0],
-        "type": "adult",
-        "model": "actor1",
-        "waypoints": [[0.0, -20.0, 0.0], [0.0, 20.0, 0.0]],
-        "waypoint_mode": 0
-      },
-      {
         "name": "3",
         "id": 0,
-        "pos": [0.0, 0.0, 0.0],
+        "pos": [4.0, 4.0, 0.0],
         "type": "adult",
         "model": "actor1",
-        "waypoints": [[20.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
-        "waypoint_mode": 0
+        "waypoints": [[7.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
       },
       {
         "name": "4",
         "id": 0,
-        "pos": [0.0, 0.0, 0.0],
+        "pos": [1.0, -1.0, 0.0],
         "type": "adult",
         "model": "actor1",
-        "waypoints": [[-20.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
-        "waypoint_mode": 0
+        "waypoints": [[-7.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
       },
       {
         "name": "5",
         "id": 0,
-        "pos": [0.0, 0.0, 0.0],
+        "pos": [-1.0, -1.0, 0.0],
         "type": "adult",
         "model": "actor1",
-        "waypoints": [[0.0, 20.0, 0.0], [0.0, 0.0, 0.0]],
-        "waypoint_mode": 0
+        "waypoints": [[0.0, 7.0, 0.0], [0.0, 0.0, 0.0]]
       },
       {
         "name": "6",
         "id": 0,
-        "pos": [0.0, 0.0, 0.0],
+        "pos": [-1.0, 1.0, 0.0],
         "type": "adult",
         "model": "actor1",
-        "waypoints": [[0.0, -20.0, 0.0], [0.0, 0.0, 0.0]],
-        "waypoint_mode": 0
+        "waypoints": [[0.0, -7.0, 0.0], [0.0, 0.0, 0.0]]
       },
       {
         "name": "7",
         "id": 0,
-        "pos": [20.0, 0.0, 0.0],
+        "pos": [7.0, 0.0, 0.0],
         "type": "adult",
         "model": "actor1",
-        "waypoints": [[0.0, 0.0, 0.0], [20.0, 0.0, 0.0]],
-        "waypoint_mode": 0
+        "waypoints": [[0.0, 0.0, 0.0], [7.0, 0.0, 0.0]]
       },
       {
         "name": "8",
         "id": 0,
-        "pos": [-20.0, 0.0, 0.0],
+        "pos": [-7.0, 0.0, 0.0],
         "type": "adult",
         "model": "actor1",
-        "waypoints": [[0.0, 0.0, 0.0], [-20.0, 0.0, 0.0]],
-        "waypoint_mode": 0
+        "waypoints": [[0.0, 0.0, 0.0], [-7.0, 0.0, 0.0]]
       },
       {
         "name": "9",
         "id": 0,
-        "pos": [0.0, 20.0, 0.0],
+        "pos": [0.0, 6.0, 0.0],
         "type": "adult",
         "model": "actor1",
-        "waypoints": [[0.0, 0.0, 0.0], [0.0, 20.0, 0.0]],
-        "waypoint_mode": 0
+        "waypoints": [[0.0, 0.0, 0.0], [0.0, 7.0, 0.0]]
       },
       {
         "name": "10",
         "id": 0,
-        "pos": [0.0, -20.0, 0.0],
+        "pos": [0.0, -7.0, 0.0],
         "type": "adult",
         "model": "actor1",
-        "waypoints": [[0.0, 0.0, 0.0], [0.0, -20.0, 0.0]],
-        "waypoint_mode": 0
+        "waypoints": [[0.0, 0.0, 0.0], [0.0, -7.0, 0.0]]
       }
     ]
   },

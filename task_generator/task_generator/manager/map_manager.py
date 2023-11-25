@@ -16,9 +16,9 @@ class MapManager:
     obstacle positions.
     """
 
-    _map: GetDistanceMapResponse
-    _map_with_distances: np.ndarray
-    _origin: Point
+    map: GetDistanceMapResponse
+    map_with_distances: np.ndarray
+    origin: Point
     _forbidden_zones: List[Waypoint]
 
     def __init__(self, map: GetDistanceMapResponse):
@@ -26,12 +26,12 @@ class MapManager:
         self.init_forbidden_zones()
 
     def update_map(self, map: GetDistanceMapResponse):
-        self._map = map
-        self._map_with_distances = np.reshape(
-            self._map.data,
-            (self._map.info.height, self._map.info.width)
+        self.map = map
+        self.map_with_distances = np.reshape(
+            self.map.data,
+            (self.map.info.height, self.map.info.width)
         )
-        self._origin = map.info.origin.position
+        self.origin = map.info.origin.position
 
     def init_forbidden_zones(self, init: Optional[List[Waypoint]] = None):
         if init is None:
@@ -68,20 +68,20 @@ class MapManager:
         # map -> resolution of map is m / cell -> safe_dist in cells is
         # safe_dist / resolution
         safe_dist_in_cells = math.ceil(
-            safe_dist / self._map.info.resolution) + 1
+            safe_dist / self.map.info.resolution) + 1
 
         forbidden_zones_in_cells: List[Waypoint] = [
             (
-                math.ceil(point[0] / self._map.info.resolution),
-                math.ceil(point[1] / self._map.info.resolution),
-                math.ceil(point[2] / self._map.info.resolution)
+                math.ceil(point[0] / self.map.info.resolution),
+                math.ceil(point[1] / self.map.info.resolution),
+                math.ceil(point[2] / self.map.info.resolution)
             )
             for point in self._forbidden_zones + (forbidden_zones if forbidden_zones is not None else [])
         ]
 
         # Now get index of all cells were dist is > safe_dist_in_cells
         possible_cells: List[Tuple[np.intp, np.intp]] = np.array(
-            np.where(self._map_with_distances > safe_dist_in_cells)).transpose().tolist()
+            np.where(self.map_with_distances > safe_dist_in_cells)).transpose().tolist()
 
         # return (random.randint(1,6), random.randint(1, 9), 0)
         assert len(possible_cells) > 0, "No cells available"
@@ -107,8 +107,8 @@ class MapManager:
         theta = random.uniform(-math.pi, math.pi)
 
         point: Waypoint = (
-            float(np.round(y * self._map.info.resolution + self._origin.y, 3)),
-            float(np.round(x * self._map.info.resolution + self._origin.x, 3)),
+            float(np.round(y * self.map.info.resolution + self.origin.y, 3)),
+            float(np.round(x * self.map.info.resolution + self.origin.x, 3)),
             theta
         )
 

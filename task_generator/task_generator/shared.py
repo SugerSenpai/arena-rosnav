@@ -16,6 +16,9 @@ from typing import (
 
 import enum
 
+import numpy as np
+import scipy
+
 
 class Namespace(str):
     def __call__(self, *args: str) -> Namespace:
@@ -302,3 +305,157 @@ class Robot(RobotProps):
             record_data=record_data,
             extra=obj,
         )
+
+
+
+
+
+
+
+
+
+
+
+_WorldWall = Tuple[Tuple[int, int], Tuple[int, int]]
+WorldWalls = Collection[_WorldWall]
+WorldObstacles = Collection[Obstacle]
+
+class _WallLines(Dict[float, List[Tuple[float, float]]]):
+    """
+    Helper class for efficiently merging collinear line segments
+    """
+
+    _inverted: bool
+
+    def __init__(self, inverted: bool = False, *args, **kwargs):
+        """
+        inverted=True for y-axis pass
+        """
+        super().__init__(*args, **kwargs)
+        self._inverted = inverted
+
+    def add(self, major: float, minor: float, length: float = 1):
+        """
+        add a wall segment in row <major> at position <minor> with length <length> and merge with previous line segment if their endpoints touch
+        """
+        if major not in self:
+            self[major] = [(minor, minor+length)]
+            return
+
+        last = self[major][-1]
+
+        if minor == last[1]:
+            self[major][-1] = (last[0], minor+length)
+        else:
+            self[major].append((minor, minor+length))
+
+    @property
+    def lines(self) -> WorldWalls:
+        """
+        get WorldWalls object
+        """
+        if not self._inverted:
+            return set([((int(start), int(major)), (int(end), int(major))) for major, segment in self.items() for start, end in segment])
+        else:
+            return set([((int(major), int(start)), (int(major), int(end))) for major, segment in self.items() for start, end in segment])
+
+def RLE_1D(grid: np.ndarray) -> List[List[int]]:
+    """
+    run-length encode walls in 1D (occupancy grid -> run_length[segments][rows])
+    """
+    res: List[List[int]] = list()
+    for major in grid:
+        run: int = 1
+        last: int = major[0]
+        subres: List[int] = [0]
+        for minor in major[1:]:
+            if minor == last:
+                run += 1
+            else:
+                subres.append(run)
+                run = 1
+                last = minor
+        subres.append(run)
+        res.append(subres)
+    return res
+
+def RLE_2D(grid: np.ndarray) -> WorldWalls:
+    """
+    rudimentary (but fast) 2D extension of 1D-RLE to 2D (occupancy grid -> WorldWalls)
+    """
+
+    walls_x = _WallLines()
+    walls_y = _WallLines(inverted=True)
+
+    for y, rles in enumerate(RLE_1D(grid)):
+        distance: int = 0
+        for run in rles:
+            distance += run
+            walls_x.add(distance, y)
+
+    for x, rles in enumerate(RLE_1D(grid.T)):
+        distance: int = 0
+        for run in rles:
+            distance += run
+            walls_y.add(distance, x)
+
+    return set().union(walls_x.lines, walls_y.lines)
+
+@dataclasses.dataclass
+class WorldObstacleConfiguration:
+    """
+    only use this for receiving ros messages
+    """
+    position: PositionOrientation
+    model_name: str
+    extra: Dict
+
+
+@dataclasses.dataclass
+class WorldEntities:
+    obstacles: WorldObstacles
+    walls: WorldWalls
+
+
+class WorldOccupancy:
+    FULL: np.uint8 = np.uint8(np.iinfo(np.uint8).min)
+    EMPTY: np.uint8 = np.uint8(np.iinfo(np.uint8).max)
+
+    _grid: np.ndarray
+
+    def __init__(self, grid: np.ndarray):
+        self._grid = grid
+
+    @staticmethod
+    def from_map(input_map: np.ndarray) -> "WorldOccupancy":
+        remap = scipy.interpolate.interp1d([input_map.max(),input_map.min()],[WorldOccupancy.EMPTY, WorldOccupancy.FULL])
+        return WorldOccupancy(remap(input_map))
+
+    @staticmethod
+    def empty(grid: np.ndarray) -> np.ndarray:
+        return grid >= (WorldOccupancy.FULL + WorldOccupancy.EMPTY) / 2
+    
+    @staticmethod
+    def not_empty(grid: np.ndarray) -> np.ndarray:
+        return grid < WorldOccupancy.EMPTY
+    
+    @staticmethod
+    def full(grid: np.ndarray) -> np.ndarray:
+        return grid <= (WorldOccupancy.FULL + WorldOccupancy.EMPTY) / 2
+    
+    @staticmethod
+    def not_full(grid: np.ndarray) -> np.ndarray:
+        return grid > WorldOccupancy.FULL
+
+    @property
+    def grid(self) -> np.ndarray:
+        return self._grid
+
+    def clear(self):
+        self.grid.fill(WorldOccupancy.EMPTY)
+
+    def occupy(self, zone: Position, radius: float):
+        self._grid[
+            int(zone[1]-radius):int(zone[1]+radius),
+            int(zone[0]-radius):int(zone[0]+radius)
+        ] = WorldOccupancy.FULL

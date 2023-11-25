@@ -8,9 +8,9 @@ import rospy
 import re
 
 
-from pedsim_msgs.msg import Ped, InteractiveObstacle, AgentState, AgentStates, Waypoints, Waypoint, Ped
+from pedsim_msgs.msg import Ped, InteractiveObstacle, LineObstacle, LineObstacles, AgentState, AgentStates, Waypoint, Waypoints
 from geometry_msgs.msg import Point, Pose, Quaternion
-from pedsim_srvs.srv import SpawnInteractiveObstacles, SpawnObstacle, SpawnPeds, RegisterRobot, RegisterRobotRequest
+from pedsim_srvs.srv import SpawnInteractiveObstacles, SpawnInteractiveObstaclesRequest, SpawnObstacle, SpawnObstacleRequest, SpawnPeds, SpawnPedsRequest, RegisterRobot, RegisterRobotRequest
 from std_srvs.srv import SetBool, Trigger
 
 
@@ -374,8 +374,17 @@ class PedsimManager(EntityManager):
             "agent_topic_string"), self.agent_topic_str)
         rospy.set_param("respawn_dynamic", True)
 
-    def spawn_line_obstacle(self, name, _from, _to):
-        return
+    def spawn_line_obstacles(self, walls):
+        msg = SpawnObstacleRequest()
+        msg.staticObstacles.obstacles = list()
+
+        for wall in walls:
+            obs = LineObstacle()
+            obs.start.x, obs.start.y = wall[0]
+            obs.end.x, obs.end.y = wall[1]
+            msg.staticObstacles.obstacles.append(obs)
+
+        self._add_obstacle_srv(msg)
 
     def unuse_obstacles(self):
         self._remove_all_interactive_obstacles_srv.call()

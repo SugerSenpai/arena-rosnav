@@ -3,16 +3,19 @@
 import dataclasses
 import os
 import traceback
-from typing import Dict, List
+from typing import Collection, Dict, List, Optional, Tuple
+import numpy as np
 from rospkg import RosPack
 import rospkg
+import scipy
+from typing import Callable
 import yaml
 import rospy
 
 from std_msgs.msg import Int16, Empty as EmptyMsg
 from std_srvs.srv import Empty, EmptyRequest, EmptyResponse
 from task_generator.manager.robot_manager import RobotManager
-from task_generator.shared import ModelWrapper, Namespace, Robot, gen_init_pos
+from task_generator.shared import RLE_2D, ModelWrapper, Namespace, Obstacle, Position, PositionOrientation, Robot, WorldOccupancy, WorldWalls, gen_init_pos
 from task_generator.simulators.base_simulator import BaseSimulator
 
 from task_generator.tasks import TaskFactory, BaseTask
@@ -190,6 +193,26 @@ class TaskGenerator:
             self._entity_manager = EntityManager(
                 namespace=self._namespace.simulation_ns, simulator=self._env_wrapper
             )
+
+        
+
+        def occupancy_to_walls(occupancy_grid: np.ndarray, transform: Optional[Callable[[Tuple[int,int]], Tuple[int, int]]] = None) -> WorldWalls:
+            walls = RLE_2D(grid=WorldOccupancy.not_full(occupancy_grid))
+
+            if transform is None:
+                transform = lambda p: (int(p[0]), int(p[1]))
+
+            return [(transform(wall[0]), transform(wall[1])) for wall in walls if np.linalg.norm(np.array(wall[0])-np.array(wall[1])) > 1]
+
+
+        def tf_grid2pos(grid_pos: Tuple[int, int]) -> Tuple[int, int]:
+            return (int(grid_pos[1] * map_manager.map.info.resolution  + int(map_manager.origin.y)), int((grid_pos[0]) * map_manager.map.info.resolution + int(map_manager.origin.x)))
+
+        self._entity_manager.spawn_line_obstacles(walls=occupancy_to_walls(
+            occupancy_grid=map_manager.map_with_distances,
+            transform=tf_grid2pos
+        ))
+
 
         obstacle_manager = ObstacleManager(
             namespace=self._namespace.simulation_ns,
