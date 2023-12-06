@@ -57,22 +57,23 @@ class ConfigFileGenerator:
 
         return EmptyResponse()
 
+    @staticmethod
     def create_display_for_topic(robot_name, topic, color):
         matchers = [
             (Matcher.GLOBAL_PLAN, Config.create_path_display),
             (Matcher.LASER_SCAN, Config.create_laser_scan_display),
             (Matcher.GLOBAL_COSTMAP, Config.create_global_map_display),
             (Matcher.LOCAL_COSTMAP, Config.create_local_map_display),
-            (Matcher.CURRENT_GOAL, Config.create_pose_display),
-            (Matcher.SUBGOAL, Config.create_pose_display),
+            (Matcher.CURRENT_GOAL, Config.create_pose_display, {"goalname":"Goal"}),
+            (Matcher.SUBGOAL, Config.create_pose_display, {"goalname":"Subgoal"}),
             (Matcher.MODEL, Config.create_model_display) 
         ]
 
-        for matcher, function in matchers:
+        for matcher, function, kwargs in ((*mtchr, {}) if len(mtchr)<3 else mtchr for mtchr in matchers):
             match = re.search(matcher(robot_name), topic)
 
             if match:
-                return function(robot_name, topic, color)
+                return function(robot_name, topic, color, **kwargs)
 
     @staticmethod
     def send_load_config(file_path):

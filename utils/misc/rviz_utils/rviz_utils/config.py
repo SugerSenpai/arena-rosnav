@@ -155,7 +155,7 @@ class Config:
             "Value": True
         }
 
-    def create_pose_display(robot_name, topic, color):
+    def create_pose_display(robot_name, topic, color, goalname = "Goal"):
         return {
             "Alpha": 1,
             "Axes Length": 1,
@@ -165,7 +165,7 @@ class Config:
             "Enabled": True,
             "Head Length": 0.1,
             "Head Radius": 0.15,
-            "Name": f"{robot_name} Goal",
+            "Name": f"{robot_name} {goalname}",
             "Queue Size": 10,
             "Shaft Length": 0.5,
             "Shaft Radius": 0.03,
