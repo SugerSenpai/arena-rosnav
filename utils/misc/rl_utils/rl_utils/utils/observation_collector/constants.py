@@ -22,8 +22,8 @@ class OBS_DICT_KEYS:
     GLOBAL_PLAN = "global_plan"
     DONE = "is_done"
 
-    PEDESTRIAN_LOCATION = SemanticAttribute.PEDESTRIAN_LOCATION.value
+    PEDESTRIAN_LOCATION = SemanticAttribute.IS_PEDESTRIAN.value
     PEDESTRIAN_TYPE = SemanticAttribute.PEDESTRIAN_TYPE.value
-    PEDESTRIAN_MOVING = SemanticAttribute.PEDESTRIAN_MOVING.value
+    PEDESTRIAN_MOVING = SemanticAttribute.IS_PEDESTRIAN_MOVING.value
     PEDESTRIAN_VEL_X = SemanticAttribute.PEDESTRIAN_VEL_X.value
     PEDESTRIAN_VEL_Y = SemanticAttribute.PEDESTRIAN_VEL_Y.value
