@@ -29,8 +29,8 @@
 
 - git:
     local-name: ../utils-extern/ros/navigation
-    uri: https://github.com/arena-rosnav/navigation.git
-    version: master
+    uri: https://github.com/voshch/navigation.git
+    version: sin
 
 - git:
     local-name: ../utils-extern/ros/move_base_flex

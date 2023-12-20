@@ -4,6 +4,11 @@
     <!-- TODO capture actual args -->
     <arg name="args" default="" />
 
+    <arg name="env" />
+    <arg name="robot" />
+
+    <remap from="move_base_flex/local_costmap/get_dump" to="$(arg env)/$(arg robot)/move_base_flex/local_costmap/get_dump" />
+
     <node name="train_agent"
         type="train_agent.py"
         pkg="training"

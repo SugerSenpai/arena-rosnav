@@ -33,7 +33,7 @@ class AggregateCollectorUnit(CollectorUnit):
     def __init__(self, ns: Namespace, observation_manager: "ObservationCollector"):
         super().__init__(Namespace(ns), observation_manager)
         self._get_dump_srv = rospy.ServiceProxy(
-            self._ns("move_base_flex/global_costmap/get_dump"), GetDump
+            "move_base_flex/local_costmap/get_dump", GetDump
         )
 
     def init_subs(self):
