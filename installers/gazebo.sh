@@ -34,3 +34,6 @@ export GZ_VERSION=${GAZEBO_VERSION}
 cd "${ARENA_WS_DIR}/src"
 git clone https://github.com/gazebosim/ros_gz.git -b ${ARENA_ROS_VERSION}
 cd "${ARENA_WS_DIR}"
+
+# python dependencies for gazebo
+sudo apt install python3-gz-msgs11 python3-gz-transport14 python3-gz-math8

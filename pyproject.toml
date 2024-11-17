@@ -23,6 +23,11 @@ rosros = "^0.2.5"
 transforms3d = "^0.4.2"
 opencv-python = "^4.2.0"
 
+# Add system dependencies for Gazebo
+gz-msgs11 = {path = "/usr/lib/python3/dist-packages"}
+gz-math8 = {path = "/usr/lib/python3/dist-packages"}
+gz-transport14 = {path = "/usr/lib/python3/dist-packages"}
+
 [tool.poetry.group.planners]
 # all planners except rosnav and aio
 optional = true
