@@ -16,6 +16,16 @@ colcon build \
 cd $ARENA_WS_DIR
 source install/local_setup.bash
 
+# Add Gazebo environment variables
+export GZ_CONFIG_PATH="${ARENA_WS_DIR}/install/gz-sim7/share/gz"
+export GZ_SIM_PHYSICS_ENGINE_PATH="${ARENA_WS_DIR}/build/gz-physics6"
+export GZ_SIM_RESOURCE_PATH="\
+${ARENA_WS_DIR}/src/deps/robots/jackal:\
+${ARENA_WS_DIR}/src/arena/simulation-setup/entities:\
+${ARENA_WS_DIR}/src/arena/simulation-setup/worlds:\
+${ARENA_WS_DIR}/src/arena/simulation-setup/gazebo_models:\
+${ARENA_WS_DIR}/src/arena/simulation-setup/gazebo_models/Cafe table/materials/textures"
+
 for package in $(ls /opt/ros/humble/share/) ; do
     setup_file="/opt/ros/humble/share/${package}/local_setup.bash"
     if [ -f "$setup_file" ] ; then
